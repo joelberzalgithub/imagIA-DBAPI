@@ -1,6 +1,6 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
-import java.sql.Date;
+import java.util.Date;
 
 
 import jakarta.persistence.Entity;
@@ -17,19 +17,21 @@ import jakarta.persistence.ManyToOne;
 @Entity // Indica que aquesta classe és una entitat JPA
 public class Peticions {
 
-    @Id // Marca el camp com a clau primària
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura la generació automàtica del valor
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
     private String imatge;
-    private Date date;
-    private String Descripcio;
+    
+    private Date data;
+    private String Prompt;
+    private String model;
 
 
-    public Peticions(Long id, String imatge, Date date, String Descripcio) {
-        this.id = id;
+    public Peticions(String imatge, Date data, String Prompt,String model) {
         this.imatge = imatge;
-        this.date = date;
-        this.Descripcio = Descripcio;
+        this.data = data;
+        this.Prompt = Prompt;
+        this.model = model;
     }
 
 
@@ -65,20 +67,28 @@ public class Peticions {
         this.imatge = imatge;
     }
 
-    public Date getDate() {
-        return this.date;
+    public String getModel() {
+        return this.model;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public Date getDate() {
+        return this.data;
+    }
+
+    public void setDate(Date data) {
+        this.data = data;
     }
 
     public String getDescripcio() {
-        return this.Descripcio;
+        return this.Prompt;
     }
 
-    public void setDescripcio(String Descripcio) {
-        this.Descripcio = Descripcio;
+    public void setDescripcio(String Prompt) {
+        this.Prompt = Prompt;
     }
 
 }

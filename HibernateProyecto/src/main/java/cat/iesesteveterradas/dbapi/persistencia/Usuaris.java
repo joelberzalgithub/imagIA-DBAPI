@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
@@ -16,34 +17,64 @@ import java.util.List;
 
 @Entity
 public class Usuaris {
-    @Id // Marca el camp com a clau primària
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura la generació automàtica del valor
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nickname;
-
     private String apitoken;
-
     private Boolean ToS;
+    // Se eliminó el campo String pla; ya que ahora será una relación con la entidad Pla
+    private String telefon;
+    private String codi_validacio;
+    private String email;
 
-    private String pla;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pla_id")
+    private Pla pla;
 
-    private int telefon;
+    @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Peticions> peticions = new ArrayList<>();
 
-    private int codi_validacio;
+    @ManyToMany
+    @JoinTable(
+        name = "usuaris_grups", 
+        joinColumns = @JoinColumn(name = "usuari_id"), 
+        inverseJoinColumns = @JoinColumn(name = "grup_id")
+    )
+    private List<Grups> grups;
 
-    // Constructors
+    @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Missatges> missatges = new ArrayList<>();
+
+    
     public Usuaris() {
     }
 
-
-    public Usuaris( String nickname, String apitoken, Boolean ToS, String pla, int telefon, int codi_validacio) {
+    public Usuaris(String nickname, String apitoken, Boolean ToS, Pla pla, String telefon, String codi_validacio) {
         this.nickname = nickname;
         this.apitoken = apitoken;
         this.ToS = ToS;
-        this.pla = pla;
+        this.pla = pla; 
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
+    }
+
+    public Usuaris(String nickname, String telefon, String codi_validacio, String email) {
+        this.nickname = nickname;
+        this.email = email;
+        this.telefon = telefon;
+        this.codi_validacio = codi_validacio;
+    }
+
+    
+    public Pla getPla() {
+        return pla;
+    }
+
+    public void setPla(Pla pla) {
+        this.pla = pla;
     }
     
 
@@ -55,12 +86,20 @@ public class Usuaris {
         this.nickname = nickname;
     }
 
-    public int getCodivalidacio() {
+    public String getCodivalidacio() {
         return this.codi_validacio;
     }
 
-    public void setNickname(int codi_validacio) {
+    public void setCodiValidacio(String codi_validacio) {
         this.codi_validacio = codi_validacio;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getApitoken() {
@@ -83,39 +122,13 @@ public class Usuaris {
         this.ToS = ToS;
     }
 
-    public String getPla() {
-        return this.pla;
-    }
-
-    public void setPla(String pla) {
-        this.pla = pla;
-    }
-
-    public int getTelefon() {
+    public String getTelefon() {
         return this.telefon;
     }
 
-    public void setTelefon(int telefon) {
+    public void setTelefon(String telefon) {
         this.telefon = telefon;
     }
-
-
-    @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Peticions> peticions = new ArrayList<>();
-
-
-    @ManyToMany
-    @JoinTable(
-    name = "usuaris_grups", // nombre de la tabla de unión
-    joinColumns = @JoinColumn(name = "usuari_id"), // clave foránea que apunta a Usuaris
-    inverseJoinColumns = @JoinColumn(name = "grup_id") // clave foránea que apunta a Grups
-    )
-    private List<Grups> grups;
-
-
-    @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Missatges> missatges = new ArrayList<>();
-
     // Getters i setters
     public Long getId() {
         return id;
