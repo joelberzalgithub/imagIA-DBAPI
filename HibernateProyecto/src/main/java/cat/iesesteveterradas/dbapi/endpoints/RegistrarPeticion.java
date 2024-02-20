@@ -2,6 +2,9 @@ package cat.iesesteveterradas.dbapi.endpoints;
 
 
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.Date;
 
 import org.json.JSONObject;
@@ -26,7 +29,7 @@ public class RegistrarPeticion {
             
             String prompt = input.optString("prompt", null);
             String model = input.optString("model", null);
-            String imatges = input.optString("imatges", null);
+            String path = input.optString("imatges", null);
         
             if (model == null || model.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Model requerit\"}").build();
@@ -37,17 +40,45 @@ public class RegistrarPeticion {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Prompt requerit\"}").build();
             }
 
-            if (imatges == null || imatges.trim().isEmpty()) {
+            if (path == null || path.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Base 64 requerit\"}").build();
             }
 
             long currentTimeMillis = System.currentTimeMillis();
-
-            // Create a new Date object with the current time
             Date currentDate = new Date(currentTimeMillis);
+            
+            String imageType = getImageType(path);
+            byte[] imageBytes = Base64.getDecoder().decode(path);
+            long ultima = PeticionsDAO.obtenUltimoIdPeticio()+1;
+            
+            if (imageType.equals("JPG")){
+                path = "Imagenes/imagen"+ultima+".jpg";
+                try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/imagen"+ultima+".jpg")) {
+                    imageOutFile.write(imageBytes);
+                    System.out.println("La imagen se ha creado exitosamente.");
+                } catch (IOException e) {
+                    System.out.println("Error al escribir la imagen");
+                    e.printStackTrace();
+                }                
+            }else{
+                path = "Imagenes/imagen"+ultima+".png";
+                try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/imagen"+ultima+".png")) {
+                    imageOutFile.write(imageBytes);
+                    System.out.println("La imagen se ha creado exitosamente.");
+                } catch (IOException e) {
+                    System.out.println("Error al escribir la imagen");
+                    e.printStackTrace();
+                }
+                
+            }
+            
+            
+            
+            
+            
+            Peticions peticio = PeticionsDAO.creaPeticions(model, prompt,path,currentDate);
 
-
-            Peticions peticio = PeticionsDAO.creaPeticions(model, prompt, imatges,currentDate);
+            
             
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
@@ -67,6 +98,15 @@ public class RegistrarPeticion {
             return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la peticio\"}").build();
         }
     }
+    public static String getImageType(String base64String) {
+            if (base64String.startsWith("iVBORw0KGgo")) {
+                return "PNG";
+            } else if (base64String.startsWith("/9j/")) {
+                return "JPG";
+            } else {
+                return "Unknown";
+            }
+        }
 }
 
 
