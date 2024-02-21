@@ -95,6 +95,7 @@ public class RegistrarPeticion {
             String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la peticio\"}").build();
         }
     }
