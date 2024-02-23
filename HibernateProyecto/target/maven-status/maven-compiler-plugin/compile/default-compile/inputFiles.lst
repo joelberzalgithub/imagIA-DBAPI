@@ -1,23 +1,24 @@
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/AppMain.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/DBApi.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ExemplesConfiguracioResource.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ExemplesResource.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/HolaResource.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/IniciResource.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarPeticion.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/SeguretatResource.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/TestResource.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Configuracio.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/ConfiguracioDAO.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/GenericDAO.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Grups.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Missatges.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Peticions.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/PeticionsDAO.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Pla.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Propietat.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Usuaris.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/UsuarisDao.java
-/home/super/Hibernate Proyecto/src/main/java/cat/iesesteveterradas/dbapi/respostes/RespostaBasica.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/AppMain.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/DBApi.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ExemplesConfiguracioResource.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ExemplesResource.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/HolaResource.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/IniciResource.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarPeticion.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarResposta.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/SeguretatResource.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Configuracio.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/ConfiguracioDAO.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/GenericDAO.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Grups.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Peticions.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/PeticionsDAO.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Pla.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Propietat.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Resposta.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/RespostaDAO.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Usuaris.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/UsuarisDao.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/respostes/RespostaBasica.java

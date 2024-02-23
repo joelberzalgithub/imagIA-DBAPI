@@ -1,6 +1,7 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -10,15 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.hibernate.query.Query;
 
 public class PeticionsDAO {
-    private static final Logger logger = LoggerFactory.getLogger(ConfiguracioDAO.class);
+    private static final Logger logger = LoggerFactory.getLogger(PeticionsDAO.class);
 
-    public static Peticions creaPeticions(String model, String prompt, String path, Date data) {
+    public static Peticions creaPeticions(String model, String prompt, List<String> path, Date data) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Peticions peticio = null;
         try {
             tx = session.beginTransaction();
-            
             peticio = new Peticions(path, data, prompt, model);
             session.save(peticio);
             tx.commit();
@@ -47,7 +47,8 @@ public class PeticionsDAO {
             if (ultimoId != null) {
                 logger.info("Último ID de petición obtenido con éxito: {}", ultimoId);
             } else {
-                logger.info("No hay peticiones en la base de datos.");
+                ultimoId = (long) 0;
+                
             }
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
@@ -57,4 +58,26 @@ public class PeticionsDAO {
         }
         return ultimoId;
     }
+
+    public static Peticions findPeticionsById(long id) {
+        Peticions peticions = null;
+        Transaction transaction = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            peticions = session.get(Peticions.class, id);
+            if (peticions == null) {
+                logger.info("No se encontró ninguna Peticions con el ID: {}", id);
+            } else {
+                logger.info("Peticions encontrada: {}", peticions.toString()); // Asegúrate de que Peticions tenga un método toString() adecuado
+            }
+            transaction.commit(); // Commit solo es necesario si se modifican datos, pero se deja para mantener la estructura.
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al buscar Peticions con ID: {}", id, e);
+        }
+        return peticions;
+    }
+    
 }

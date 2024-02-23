@@ -12,13 +12,15 @@ public class RegistrarUsuari {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response afegirUsuari(String jsonInput) {
+    public Response afegirUsuari(String jsonInput,@HeaderParam("Authorization") String authorizationHeader) {
         try {
+            String token = authorizationHeader != null && authorizationHeader.startsWith("Bearer ")
+            ? authorizationHeader.substring(7)
+            : null;
             JSONObject input = new JSONObject(jsonInput);
             
             String telefon = input.optString("telefon", null);
             String nickname = input.optString("nickname", null);
-            String codi_validacio = input.optString("codi_validacio", null);
             String email = input.optString("email", null);
 
 
@@ -32,17 +34,12 @@ public class RegistrarUsuari {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Telèfon requerit\"}").build();
             }
 
-            // Validación para 'codi_validacio'
-            if (codi_validacio == null || codi_validacio.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Codi de validació requerit\"}").build();
-            }
-
             // Validación para 'email'
             if (email == null || email.trim().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerit\"}").build();
             }
 
-            UsuarisDao.creaUsuario(nickname, telefon, codi_validacio, email);
+            UsuarisDao.creaUsuario(nickname, telefon, email,token);
             
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
@@ -64,4 +61,3 @@ public class RegistrarUsuari {
         }
     }
 }
-

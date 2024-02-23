@@ -13,7 +13,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Usuaris {
@@ -24,7 +26,6 @@ public class Usuaris {
     private String nickname;
     private String apitoken;
     private Boolean ToS;
-    // Se eliminó el campo String pla; ya que ahora será una relación con la entidad Pla
     private String telefon;
     private String codi_validacio;
     private String email;
@@ -35,7 +36,7 @@ public class Usuaris {
     private Pla pla;
 
     @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Peticions> peticions = new ArrayList<>();
+    private Set<Peticions> peticions = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -45,8 +46,7 @@ public class Usuaris {
     )
     private List<Grups> grups;
 
-    @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Missatges> missatges = new ArrayList<>();
+    
 
     
     public Usuaris() {
@@ -61,11 +61,12 @@ public class Usuaris {
         this.codi_validacio = codi_validacio;
     }
 
-    public Usuaris(String nickname, String telefon, String codi_validacio, String email) {
+    public Usuaris(String nickname, String telefon,String email,String token) {
         this.nickname = nickname;
         this.email = email;
         this.telefon = telefon;
-        this.codi_validacio = codi_validacio;
+        this.apitoken = token;
+        
     }
 
     
@@ -138,19 +139,6 @@ public class Usuaris {
         this.id = id;
     }
 
-    public List<Missatges> getMissatges() {
-        return missatges;
-    }
-
-    public void setMissatges(List<Missatges> missatges) {
-        this.missatges = missatges;
-    }
-
-    public void addMissatge(Missatges missatge) {
-        missatges.add(missatge);
-        missatge.setUsuari(this);
-    }
-
     public List<Grups> getGrups() {
         return grups;
     }
@@ -160,16 +148,17 @@ public class Usuaris {
     }
 
 
-    public List<Peticions> getPeticions() {
+    public Set<Peticions> getPeticions() {
         return peticions;
     }
 
-    public void setPeticions(List<Peticions> peticions) {
+    public void setPeticions(Set<Peticions> peticions) {
         this.peticions = peticions;
     }
 
     public void addPeticio(Peticions peticio) {
         this.peticions.add(peticio);
+        peticio.setUsuari(this);
     }
 
     @Override

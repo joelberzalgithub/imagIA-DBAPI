@@ -1,7 +1,7 @@
 cat/iesesteveterradas/dbapi/endpoints/IniciResource.class
 cat/iesesteveterradas/dbapi/persistencia/ConfiguracioDAO.class
+cat/iesesteveterradas/dbapi/persistencia/Resposta.class
 cat/iesesteveterradas/dbapi/persistencia/Peticions.class
-cat/iesesteveterradas/dbapi/persistencia/Missatges.class
 cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.class
 cat/iesesteveterradas/dbapi/AppMain.class
 cat/iesesteveterradas/dbapi/endpoints/HolaResource.class
@@ -16,8 +16,9 @@ cat/iesesteveterradas/dbapi/persistencia/Grups.class
 cat/iesesteveterradas/dbapi/persistencia/Propietat.class
 cat/iesesteveterradas/dbapi/DBApi.class
 cat/iesesteveterradas/dbapi/persistencia/GenericDAO.class
+cat/iesesteveterradas/dbapi/endpoints/RegistrarResposta.class
 cat/iesesteveterradas/dbapi/persistencia/Configuracio.class
 cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.class
-cat/iesesteveterradas/dbapi/endpoints/TestResource.class
+cat/iesesteveterradas/dbapi/persistencia/RespostaDAO.class
 cat/iesesteveterradas/dbapi/persistencia/Usuaris.class
 cat/iesesteveterradas/dbapi/respostes/RespostaBasica.class

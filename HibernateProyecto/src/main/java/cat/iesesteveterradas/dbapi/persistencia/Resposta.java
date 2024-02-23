@@ -5,27 +5,33 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.JoinColumn;
 
 @Entity
-public class Missatges {
-
+public class Resposta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    private String text;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuari_id") // Este es el nombre de la columna de clave foránea en la tabla Missatges
-    private Usuaris usuari;
 
-    // Constructores, getters y setters
+    private String text;
+
     
-    public Missatges() {
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "peticions_id", unique = true)
+    private Peticions peticions;
+
+    
+    public Resposta() {
     }
 
+    
+    public Resposta(String text, Peticions peticio){
+        this.text = text;
+        this.peticions = peticio;
+    }
+
+    
     public Long getId() {
         return id;
     }
@@ -42,11 +48,11 @@ public class Missatges {
         this.text = text;
     }
 
-    public Usuaris getUsuari() {
-        return usuari;
+    public Peticions getPeticions() {
+        return peticions;
     }
 
-    public void setUsuari(Usuaris usuari) {
-        this.usuari = usuari;
+    public void setPeticions(Peticions peticions) {
+        this.peticions = peticions;
     }
 }

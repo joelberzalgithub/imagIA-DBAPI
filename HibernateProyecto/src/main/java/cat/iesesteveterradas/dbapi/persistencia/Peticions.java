@@ -1,46 +1,47 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
 import java.util.Date;
+import java.util.List;
 
-
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-
-
-
-@Entity // Indica que aquesta classe és una entitat JPA
+@Entity // Indica que esta clase es una entidad JPA
 public class Peticions {
 
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String imatge;
-    
+
+    @ElementCollection
+    @CollectionTable(name = "peticions_paths", joinColumns = @JoinColumn(name = "peticion_id")) 
+    @Column(name = "path")
+    private List<String> paths; 
+
     private Date data;
     private String Prompt;
     private String model;
-
-
-    public Peticions(String imatge, Date data, String Prompt,String model) {
-        this.imatge = imatge;
-        this.data = data;
-        this.Prompt = Prompt;
-        this.model = model;
-    }
-
-
 
     @ManyToOne
     @JoinColumn(name = "id_usuari")
     private Usuaris usuari;
 
+    public Peticions(List<String> paths, Date data, String Prompt, String model) {
+        this.paths = paths;
+        this.data = data;
+        this.Prompt = Prompt;
+        this.model = model;
+    }
 
+    public Peticions() {
+    }
 
     public Usuaris getUsuari() {
         return this.usuari;
@@ -57,14 +58,6 @@ public class Peticions {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getImatge() {
-        return this.imatge;
-    }
-
-    public void setImatge(String imatge) {
-        this.imatge = imatge;
     }
 
     public String getModel() {
@@ -91,4 +84,11 @@ public class Peticions {
         this.Prompt = Prompt;
     }
 
+    public List<String> getPaths() {
+        return this.paths;
+    }
+
+    public void setPaths(List<String> paths) {
+        this.paths = paths;
+    }
 }

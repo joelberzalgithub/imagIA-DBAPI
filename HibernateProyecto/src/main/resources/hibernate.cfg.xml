@@ -25,13 +25,13 @@
         <property name="hibernate.show_sql">false</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
         <!-- Specify the mapping resources -->
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Peticions"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Usuaris"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Grups"/>
-        <mapping class="cat.iesesteveterradas.dbapi.persistencia.Missatges"/>
+        <mapping class="cat.iesesteveterradas.dbapi.persistencia.Resposta"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Configuracio"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Propietat"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Pla"/>
