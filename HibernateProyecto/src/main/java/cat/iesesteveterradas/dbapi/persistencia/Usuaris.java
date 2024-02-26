@@ -60,7 +60,7 @@ public class Usuaris {
         this.pla = pla; 
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
-        this
+
     }
 
     public Usuaris(String nickname, String telefon,String email,String codi_validacio) {
