@@ -8,6 +8,7 @@
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarResposta.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/SeguretatResource.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/UsuarisLogin.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ValidacioUsuari.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Configuracio.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/ConfiguracioDAO.java

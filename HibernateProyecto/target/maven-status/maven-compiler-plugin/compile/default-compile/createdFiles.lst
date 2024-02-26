@@ -1,5 +1,6 @@
 cat/iesesteveterradas/dbapi/endpoints/IniciResource.class
 cat/iesesteveterradas/dbapi/persistencia/ConfiguracioDAO.class
+cat/iesesteveterradas/dbapi/endpoints/UsuarisLogin.class
 cat/iesesteveterradas/dbapi/persistencia/Resposta.class
 cat/iesesteveterradas/dbapi/persistencia/Peticions.class
 cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.class
