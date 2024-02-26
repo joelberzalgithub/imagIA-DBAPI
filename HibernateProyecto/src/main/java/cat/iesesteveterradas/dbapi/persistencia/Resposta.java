@@ -1,5 +1,6 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Resposta {
@@ -14,6 +16,9 @@ public class Resposta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Lob 
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String text;
 
     

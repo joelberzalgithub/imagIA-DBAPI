@@ -21,4 +21,5 @@ cat/iesesteveterradas/dbapi/persistencia/Configuracio.class
 cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.class
 cat/iesesteveterradas/dbapi/persistencia/RespostaDAO.class
 cat/iesesteveterradas/dbapi/persistencia/Usuaris.class
+cat/iesesteveterradas/dbapi/endpoints/ValidacioUsuari.class
 cat/iesesteveterradas/dbapi/respostes/RespostaBasica.class

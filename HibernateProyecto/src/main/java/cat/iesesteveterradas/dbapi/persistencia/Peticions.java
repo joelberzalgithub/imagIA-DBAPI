@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-@Entity // Indica que esta clase es una entidad JPA
+@Entity 
 public class Peticions {
 
     @Id

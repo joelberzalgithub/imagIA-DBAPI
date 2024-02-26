@@ -1,5 +1,7 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
+import java.util.Random;
+
 import org.json.JSONObject;
 
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
@@ -39,7 +41,11 @@ public class RegistrarUsuari {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerit\"}").build();
             }
 
-            UsuarisDao.creaUsuario(nickname, telefon, email,token);
+            Random random = new Random();
+            int codigo1 = random.nextInt(900000) + 100000;
+            String codigo = String.valueOf(codigo1);
+
+            UsuarisDao.creaUsuario(nickname,telefon, email,codigo);
             
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
@@ -49,6 +55,7 @@ public class RegistrarUsuari {
             JSONObject userData = new JSONObject();
             userData.put("nickname", nickname);
             userData.put("email", email);
+            userData.put("codi_validacio", codigo);
 
             // Añadir el objeto "data" al JSON de respuesta
             jsonResponse.put("data", userData);

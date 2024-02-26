@@ -33,7 +33,7 @@ public class RegistrarPeticion {
         List <String> path = new ArrayList<>(); 
         try {
             String token = authorizationHeader != null && authorizationHeader.startsWith("Bearer ")
-            ? authorizationHeader.substring(7) // Extrae solo el token, sin "Bearer "
+            ? authorizationHeader.substring(7)
             : null;
             JSONObject input = new JSONObject(jsonInput);
             
@@ -64,7 +64,8 @@ public class RegistrarPeticion {
                 String base64Image = paths.getString(i);
                 String imageType = getImageType(base64Image);
                 byte[] imageBytes = Base64.getDecoder().decode(base64Image);
-                long ultima = PeticionsDAO.obtenUltimoIdPeticio()+1;
+                long ultima = PeticionsDAO.obtenUltimoIdPeticio()+i;
+                
                 if (imageType.equals("JPG")){
                      path.add("Imagenes/imagen"+ultima+".jpg");
                     try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/imagen"+ultima+".jpg")) {
@@ -87,10 +88,11 @@ public class RegistrarPeticion {
                 }
             }
             
-            
-            
-            
-            
+            boolean usu = UsuarisDao.encontrarUsuarioPorToken(token);
+
+            if (usu==false){
+                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Apitoken no valida\"}").build();
+            }
             Peticions peticio = PeticionsDAO.creaPeticions(model,prompt,path,currentDate);
             UsuarisDao.updateUsuarioPeticionByApiToken(token, peticio.getId());
 
@@ -106,8 +108,6 @@ public class RegistrarPeticion {
 
             
             jsonResponse.put("data", userData);
-
-            // Retorna la resposta
             String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {

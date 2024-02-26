@@ -39,7 +39,7 @@ public class PeticionsDAO {
         Long ultimoId = null;
         try {
             tx = session.beginTransaction();
-            // Intenta obtener el ID del último registro de la tabla Peticions
+            
             Query<Long> query = session.createQuery("SELECT p.id FROM Peticions p ORDER BY p.id DESC", Long.class);
             query.setMaxResults(1); // Asegura que solo se devuelve el último ID
             ultimoId = query.uniqueResult();
@@ -67,10 +67,8 @@ public class PeticionsDAO {
             peticions = session.get(Peticions.class, id);
             if (peticions == null) {
                 logger.info("No se encontró ninguna Peticions con el ID: {}", id);
-            } else {
-                logger.info("Peticions encontrada: {}", peticions.toString()); // Asegúrate de que Peticions tenga un método toString() adecuado
             }
-            transaction.commit(); // Commit solo es necesario si se modifican datos, pero se deja para mantener la estructura.
+            transaction.commit(); 
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

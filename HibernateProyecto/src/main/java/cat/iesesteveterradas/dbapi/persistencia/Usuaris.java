@@ -29,6 +29,7 @@ public class Usuaris {
     private String telefon;
     private String codi_validacio;
     private String email;
+    private String contrasena;
 
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,20 +53,21 @@ public class Usuaris {
     public Usuaris() {
     }
 
-    public Usuaris(String nickname, String apitoken, Boolean ToS, Pla pla, String telefon, String codi_validacio) {
+    public Usuaris(String nickname, String apitoken, Boolean ToS, Pla pla, String telefon, String codi_validacio,String contrasena) {
         this.nickname = nickname;
         this.apitoken = apitoken;
         this.ToS = ToS;
         this.pla = pla; 
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
+        this
     }
 
-    public Usuaris(String nickname, String telefon,String email,String token) {
+    public Usuaris(String nickname, String telefon,String email,String codi_validacio) {
         this.nickname = nickname;
         this.email = email;
         this.telefon = telefon;
-        this.apitoken = token;
+        this.codi_validacio = codi_validacio;
         
     }
 
