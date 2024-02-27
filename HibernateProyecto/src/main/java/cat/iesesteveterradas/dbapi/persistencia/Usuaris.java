@@ -1,6 +1,7 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +27,12 @@ public class Usuaris {
     private String nickname;
     private String apitoken;
     private Boolean ToS;
+    @Column(unique = true)
     private String telefon;
     private String codi_validacio;
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String contrasena;
 
     
@@ -39,13 +43,13 @@ public class Usuaris {
     @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Peticions> peticions = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
-        name = "usuaris_grups", 
+        name = "usuaris_grups",
         joinColumns = @JoinColumn(name = "usuari_id"), 
         inverseJoinColumns = @JoinColumn(name = "grup_id")
     )
-    private List<Grups> grups;
+    private List<Grups> grups = new ArrayList<>();
 
     
 
@@ -69,6 +73,7 @@ public class Usuaris {
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
         
+        
     }
 
     
@@ -87,6 +92,14 @@ public class Usuaris {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getContrasena() {
+        return this.contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getCodivalidacio() {

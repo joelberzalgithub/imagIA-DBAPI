@@ -1,4 +1,5 @@
 package cat.iesesteveterradas.dbapi.persistencia;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,7 +21,7 @@ public class Grups {
     private String nom;
     
     @ManyToMany(mappedBy = "grups")
-    private List<Usuaris> usuaris;
+    private List<Usuaris> usuaris = new ArrayList<>();
     
     // Constructores, getters y setters
     

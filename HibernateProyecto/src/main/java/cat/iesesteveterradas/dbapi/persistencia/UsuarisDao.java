@@ -139,7 +139,7 @@ public class UsuarisDao {
         boolean updateSuccess = false;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE apitoken = :apitoken")
+            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE email = :apitoken")
                                                 .setParameter("apitoken", apitoken)
                                                 .uniqueResult();
     
@@ -160,6 +160,61 @@ public class UsuarisDao {
         }
         return updateSuccess;
     }
+
+    public static boolean esUsuarioAdministrador(Long userId) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        boolean esAdministrador = false;
+        try {
+            tx = session.beginTransaction();
+            Long count = (Long) session.createQuery("SELECT COUNT(g) FROM Usuaris u JOIN u.grups g WHERE u.id = :userId AND g.id = 1")
+                                        .setParameter("userId", userId)
+                                        .uniqueResult();
+            tx.commit();
+            esAdministrador = count > 0;
+            if (esAdministrador) {
+                logger.info("El usuario con ID: {} es administrador", userId);
+            } else {
+                logger.info("El usuario con ID: {} no es administrador", userId);
+            }
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            logger.error("Error al verificar si el usuario con ID: {} es administrador", userId, e);
+        } finally {
+            session.close();
+        }
+
+        return esAdministrador;
+    }
+
+    public static Long encontrarUsuarioPorEmailYContrasena(String email, String contrasena) {
+        Transaction transaction = null;
+        Long usuarioId = null; // Cambio para almacenar el ID del usuario encontrado
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE email = :email AND contrasena = :contrasena")
+                                                .setParameter("email", email)
+                                                .setParameter("contrasena", contrasena)
+                                                .uniqueResult();
+    
+            if (usuario != null) {
+                usuarioId = usuario.getId(); 
+                logger.info("Usuario encontrado con el email: {}, ID: {}", email, usuarioId);
+            } else {
+                logger.info("No se encontró ningún usuario con el email: {} y contraseña proporcionada.", email);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al buscar el usuario con email: {} y contraseña proporcionada.", email, e);
+        }
+        return usuarioId;
+    }
+    
+    
     
 }
 
