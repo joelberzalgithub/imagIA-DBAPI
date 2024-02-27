@@ -139,7 +139,7 @@ public class UsuarisDao {
         boolean updateSuccess = false;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE email = :apitoken")
+            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE apitoken = :apitoken")
                                                 .setParameter("apitoken", apitoken)
                                                 .uniqueResult();
     

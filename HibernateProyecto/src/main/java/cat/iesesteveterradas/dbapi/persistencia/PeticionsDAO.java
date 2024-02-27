@@ -33,32 +33,6 @@ public class PeticionsDAO {
         return peticio;
     }
 
-    public static Long obtenUltimoIdPeticio() {
-        Session session = SessionFactoryManager.getSessionFactory().openSession();
-        Transaction tx = null;
-        Long ultimoId = null;
-        try {
-            tx = session.beginTransaction();
-            
-            Query<Long> query = session.createQuery("SELECT p.id FROM Peticions p ORDER BY p.id DESC", Long.class);
-            query.setMaxResults(1); // Asegura que solo se devuelve el último ID
-            ultimoId = query.uniqueResult();
-            tx.commit();
-            if (ultimoId != null) {
-                logger.info("Último ID de petición obtenido con éxito: {}", ultimoId);
-            } else {
-                ultimoId = (long) 0;
-                
-            }
-        } catch (HibernateException e) {
-            if (tx != null) tx.rollback();
-            logger.error("Error al obtener el último ID de petición", e);
-        } finally {
-            session.close();
-        }
-        return ultimoId;
-    }
-
     public static Peticions findPeticionsById(long id) {
         Peticions peticions = null;
         Transaction transaction = null;

@@ -63,8 +63,8 @@ public class ValidacioUsuari {
     }
 
     public static String generateRandomString(int targetStringLength) {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 48; 
+        int rightLimit = 122; 
         Random random = new Random();
 
         String generatedString = random.ints(leftLimit, rightLimit + 1)

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -64,11 +65,11 @@ public class RegistrarPeticion {
                 String base64Image = paths.getString(i);
                 String imageType = getImageType(base64Image);
                 byte[] imageBytes = Base64.getDecoder().decode(base64Image);
-                long ultima = PeticionsDAO.obtenUltimoIdPeticio()+i;
+                String nombre = generateRandomString(12);
                 
                 if (imageType.equals("JPG")){
-                     path.add("Imagenes/imagen"+ultima+".jpg");
-                    try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/imagen"+ultima+".jpg")) {
+                     path.add("Imagenes/"+nombre+".jpg");
+                    try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/"+nombre+".jpg")) {
                         imageOutFile.write(imageBytes);
                         System.out.println("La imagen se ha creado exitosamente.");
                     } catch (IOException e) {
@@ -76,8 +77,8 @@ public class RegistrarPeticion {
                         e.printStackTrace();
                     }                
                 }else{
-                    path.add("Imagenes/imagen"+ultima+".png");
-                    try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/imagen"+ultima+".png")) {
+                    path.add("Imagenes/"+nombre+".png");
+                    try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/"+nombre+".png")) {
                         imageOutFile.write(imageBytes);
                         System.out.println("La imagen se ha creado exitosamente.");
                     } catch (IOException e) {
@@ -122,6 +123,20 @@ public class RegistrarPeticion {
             } else {
                 return "Unknown";
             }
+        }
+
+        public static String generateRandomString(int targetStringLength) {
+        int leftLimit = 48; 
+        int rightLimit = 122; 
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+          .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+          .limit(targetStringLength)
+          .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+          .toString();
+
+        return generatedString;
         }
 }
 
