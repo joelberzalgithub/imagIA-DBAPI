@@ -32,7 +32,7 @@ public class ValidacioUsuari {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Telèfon requerit\"}").build();
             }
 
-            String token = generateRandomString(12);
+            String token = generateRandomString(30);
 
             
             String codi = UsuarisDao.obtenerCodigoValidacionPorTelefono(telefon);

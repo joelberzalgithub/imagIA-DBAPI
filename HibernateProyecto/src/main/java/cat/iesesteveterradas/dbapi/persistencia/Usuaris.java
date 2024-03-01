@@ -12,11 +12,15 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 
 @Entity
 public class Usuaris {
@@ -36,20 +40,23 @@ public class Usuaris {
     private String contrasena;
 
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pla_id")
     private Pla pla;
 
     @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Peticions> peticions = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
         name = "usuaris_grups",
-        joinColumns = @JoinColumn(name = "usuari_id"), 
+        joinColumns = @JoinColumn(name = "usuari_id"),
         inverseJoinColumns = @JoinColumn(name = "grup_id")
     )
     private List<Grups> grups = new ArrayList<>();
+
+    @OneToOne(mappedBy = "usuari", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Quota quota;
 
     
 
@@ -83,6 +90,15 @@ public class Usuaris {
 
     public void setPla(Pla pla) {
         this.pla = pla;
+    }
+
+    public Quota getQuota() {
+        return quota;
+    }
+    
+    public void setQuota(Quota quota) {
+        this.quota = quota;
+        quota.setUsuari(this);
     }
     
 

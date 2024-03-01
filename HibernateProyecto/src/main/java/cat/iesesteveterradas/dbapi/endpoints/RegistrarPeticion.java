@@ -89,9 +89,9 @@ public class RegistrarPeticion {
                 }
             }
             
-            boolean usu = UsuarisDao.encontrarUsuarioPorToken(token);
+            Long id = UsuarisDao.encontrarUsuarioPorToken(token);
 
-            if (usu==false){
+            if (id==null){
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Apitoken no valida\"}").build();
             }
             Peticions peticio = PeticionsDAO.creaPeticions(model,prompt,path,currentDate);

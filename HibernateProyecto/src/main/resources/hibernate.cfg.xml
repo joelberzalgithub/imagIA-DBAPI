@@ -35,5 +35,6 @@
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Configuracio"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Propietat"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Pla"/>
+        <mapping class="cat.iesesteveterradas.dbapi.persistencia.Quota"/>
     </session-factory>
 </hibernate-configuration>

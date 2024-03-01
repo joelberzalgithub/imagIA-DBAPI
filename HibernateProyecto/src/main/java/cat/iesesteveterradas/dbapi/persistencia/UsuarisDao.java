@@ -1,6 +1,8 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -134,9 +136,10 @@ public class UsuarisDao {
 
 
 
-    public static boolean encontrarUsuarioPorToken(String apitoken) {
+    public static Long encontrarUsuarioPorToken(String apitoken) {
         Transaction transaction = null;
         boolean updateSuccess = false;
+        Long id = null;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE apitoken = :apitoken")
@@ -145,9 +148,9 @@ public class UsuarisDao {
     
             if (usuario == null) {
                 logger.info("No se encontró ningún usuario con el apitoken: {}", apitoken);
-                updateSuccess = false;
+                
             } else{
-                updateSuccess = true;
+                id = usuario.getId();
             }
     
             transaction.commit();
@@ -156,9 +159,26 @@ public class UsuarisDao {
                 transaction.rollback();
             }
             logger.error("Error al actualizar el usuario con apitoken: {}", apitoken, e);
-            updateSuccess = false;
+            
         }
-        return updateSuccess;
+        return id;
+    }
+
+    public static List<Usuaris> encontrarTodosLosUsuarios() {
+        Transaction transaction = null;
+        List<Usuaris> listaDeUsuarios = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            listaDeUsuarios = session.createQuery("FROM Usuaris", Usuaris.class).list();
+            
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al recuperar los usuarios", e);
+        }
+        return listaDeUsuarios;
     }
 
     public static boolean esUsuarioAdministrador(Long userId) {

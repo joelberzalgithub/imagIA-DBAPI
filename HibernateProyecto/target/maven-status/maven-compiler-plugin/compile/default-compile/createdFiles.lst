@@ -9,6 +9,7 @@ cat/iesesteveterradas/dbapi/endpoints/HolaResource.class
 cat/iesesteveterradas/dbapi/endpoints/ExemplesResource.class
 cat/iesesteveterradas/dbapi/endpoints/ExemplesConfiguracioResource.class
 cat/iesesteveterradas/dbapi/persistencia/PeticionsDAO.class
+cat/iesesteveterradas/dbapi/persistencia/Quota.class
 cat/iesesteveterradas/dbapi/endpoints/SeguretatResource.class
 cat/iesesteveterradas/dbapi/persistencia/Pla.class
 cat/iesesteveterradas/dbapi/endpoints/RegistrarPeticion.class
@@ -22,5 +23,6 @@ cat/iesesteveterradas/dbapi/persistencia/Configuracio.class
 cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.class
 cat/iesesteveterradas/dbapi/persistencia/RespostaDAO.class
 cat/iesesteveterradas/dbapi/persistencia/Usuaris.class
+cat/iesesteveterradas/dbapi/endpoints/LlistatUsuaris.class
 cat/iesesteveterradas/dbapi/endpoints/ValidacioUsuari.class
 cat/iesesteveterradas/dbapi/respostes/RespostaBasica.class

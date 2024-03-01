@@ -23,7 +23,7 @@ public class Grups {
     @ManyToMany(mappedBy = "grups")
     private List<Usuaris> usuaris = new ArrayList<>();
     
-    // Constructores, getters y setters
+    
     
     public Grups() {
         

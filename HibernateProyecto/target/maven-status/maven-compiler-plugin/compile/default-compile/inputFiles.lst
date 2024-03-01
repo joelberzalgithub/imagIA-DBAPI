@@ -4,6 +4,7 @@
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/ExemplesResource.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/HolaResource.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/IniciResource.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/LlistatUsuaris.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarPeticion.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarResposta.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.java
@@ -18,6 +19,7 @@
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/PeticionsDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Pla.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Propietat.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Quota.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Resposta.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/RespostaDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.java
