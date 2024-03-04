@@ -44,7 +44,7 @@ public class LlistatUsuaris {
                 return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"El token proporcionado no se ha encontrado.\"}").build();
             }
 
-            List<Usuaris> usuarios = UsuarisDao.encontrarTodosLosUsuarios(); // Usamos el método previamente definido
+            List<Usuaris> usuarios = UsuarisDao.encontrarTodosLosUsuariosExcluyendoAdministradores(); // Usamos el método previamente definido
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Consulta realitzada correctament");

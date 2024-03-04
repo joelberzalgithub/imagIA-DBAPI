@@ -74,11 +74,12 @@ public class Usuaris {
 
     }
 
-    public Usuaris(String nickname, String telefon,String email,String codi_validacio) {
+    public Usuaris(String nickname, String telefon,String email,String codi_validacio,Pla id) {
         this.nickname = nickname;
         this.email = email;
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
+        this.pla = id;
         
         
     }

@@ -14,14 +14,14 @@ public class UsuarisDao {
     
     private static final Logger logger = LoggerFactory.getLogger(UsuarisDao.class);
 
-    public static Usuaris creaUsuario(String nickname, String telefon, String email,String codi_validacio) {
+    public static Usuaris creaUsuario(String nickname, String telefon, String email,String codi_validacio,Pla pla) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Usuaris usuario = null;
         
         try {
             tx = session.beginTransaction();
-            usuario = new Usuaris(nickname, telefon, email,codi_validacio);
+            usuario = new Usuaris(nickname, telefon, email,codi_validacio,pla);
             session.save(usuario);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nickname);
@@ -181,6 +181,31 @@ public class UsuarisDao {
         return listaDeUsuarios;
     }
 
+    public static List<Usuaris> encontrarTodosLosUsuariosExcluyendoAdministradores() {
+        Transaction transaction = null;
+        List<Usuaris> listaUsuarios = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            
+            // Asumiendo que el nombre del grupo de administradores es "Administrador"
+            String nombreGrupoAdministradores = "Administrador";
+            String hql = "SELECT u FROM Usuaris u WHERE NOT EXISTS (FROM u.grups g WHERE g.nom = :nombreGrupoAdministradores)";
+            
+            listaUsuarios = session.createQuery(hql, Usuaris.class)
+                                                       .setParameter("nombreGrupoAdministradores", nombreGrupoAdministradores)
+                                                       .list();
+            
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al recuperar los usuarios excluyendo administradores", e);
+        }
+        return listaUsuarios;
+    }
+    
+
     public static boolean esUsuarioAdministrador(Long userId) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
@@ -232,6 +257,41 @@ public class UsuarisDao {
             logger.error("Error al buscar el usuario con email: {} y contraseña proporcionada.", email, e);
         }
         return usuarioId;
+    }
+
+
+    public static boolean addUserToGroup(Long userId, Long groupId) {
+        Transaction transaction = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            // Recupera el usuario y el grupo de la base de datos
+            Usuaris usuari = session.get(Usuaris.class, userId);
+            Grups grup = session.get(Grups.class, groupId);
+
+            if (usuari == null || grup == null) {
+                System.out.println("Usuario o grupo no encontrado");
+                return false;
+            }
+
+            // Establece la relación
+            usuari.getGrups().add(grup);
+            grup.getUsuaris().add(usuari); // Este paso es opcional dependiendo de si quieres mantener ambas direcciones de la relación sincronizadas en memoria
+
+            // Guarda los cambios
+            session.saveOrUpdate(usuari);
+            session.saveOrUpdate(grup); // Este paso es opcional si el grupo no ha sido modificado aparte de añadir el usuario
+
+            // Completa la transacción
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        }
     }
     
     

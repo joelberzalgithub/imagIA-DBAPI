@@ -23,7 +23,16 @@ public class Quota {
     @JoinColumn(name = "usuari_id", referencedColumnName = "id")
     private Usuaris usuari;
 
+    
+
     public Quota() {
+    }
+
+    public Quota(Integer total,Integer consumida,Integer disponible, Usuaris id) {
+        this.total = total;
+        this.consumida = consumida;
+        this.disponible = disponible;
+        this.usuari = id;
     }
 
     public Long getId() {

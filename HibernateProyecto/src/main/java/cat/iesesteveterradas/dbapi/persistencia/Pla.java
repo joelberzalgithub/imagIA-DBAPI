@@ -18,6 +18,8 @@ public class Pla {
 
     private String nom;
 
+    private Integer quota;
+
     @OneToMany(mappedBy = "pla", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Usuaris> usuaris = new ArrayList<>();
     public Pla() {
@@ -41,6 +43,14 @@ public class Pla {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public Integer getQuota() {
+        return quota;
+    }
+
+    public void setQuota(Integer quota) {
+        this.quota = quota;
     }
 
     public List<Usuaris> getUsuaris() {

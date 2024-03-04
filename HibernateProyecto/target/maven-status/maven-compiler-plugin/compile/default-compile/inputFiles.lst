@@ -15,11 +15,13 @@
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/ConfiguracioDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/GenericDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Grups.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/GrupsDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Peticions.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/PeticionsDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Pla.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Propietat.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Quota.java
+/home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/QuotaDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/Resposta.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/RespostaDAO.java
 /home/super/imagIA-DBAPI/HibernateProyecto/src/main/java/cat/iesesteveterradas/dbapi/persistencia/SessionFactoryManager.java

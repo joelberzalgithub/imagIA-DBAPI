@@ -4,6 +4,11 @@ import java.util.Random;
 
 import org.json.JSONObject;
 
+import cat.iesesteveterradas.dbapi.persistencia.Grups;
+import cat.iesesteveterradas.dbapi.persistencia.GrupsDAO;
+import cat.iesesteveterradas.dbapi.persistencia.Pla;
+import cat.iesesteveterradas.dbapi.persistencia.QuotaDAO;
+import cat.iesesteveterradas.dbapi.persistencia.Usuaris;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -45,7 +50,16 @@ public class RegistrarUsuari {
             int codigo1 = random.nextInt(900000) + 100000;
             String codigo = String.valueOf(codigo1);
 
-            UsuarisDao.creaUsuario(nickname,telefon, email,codigo);
+
+
+            Pla pla = QuotaDAO.obtenQuotaDePla("Free");
+            Usuaris usuari = UsuarisDao.creaUsuario(nickname,telefon, email,codigo,pla);
+            
+            QuotaDAO.creaQuota(pla.getQuota(), pla.getQuota(), 0, usuari);
+
+            Grups grup = GrupsDAO.findGroupByName("Cliente");
+
+            UsuarisDao.addUserToGroup(usuari.getId(), grup.getId());
             
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
