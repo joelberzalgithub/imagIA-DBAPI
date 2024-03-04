@@ -293,6 +293,36 @@ public class UsuarisDao {
             return false;
         }
     }
+
+    public static String usuarioPorTelefon(String telefon) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        String codigoValidacion = null;
+
+        try {
+            tx = session.beginTransaction();
+            
+            // Busca el usuario por número de teléfono
+            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE telefon = :telefon")
+                                                .setParameter("telefon", telefon)
+                                                .uniqueResult();
+            
+            if (usuario != null) {
+                codigoValidacion = usuario.getCodivalidacio();
+                logger.info("Código de validación obtenido para el usuario con teléfono: {}", telefon);
+            } else {
+                logger.error("Usuario no encontrado con el teléfono: {}", telefon);
+                // Manejar el caso de usuario no encontrado según se necesite
+            }
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            logger.error("Error al obtener el código de validación para el usuario con teléfono: {}", telefon, e);
+        } finally {
+            session.close();
+        }
+
+        return codigoValidacion;
+    }
     
     
     

@@ -14,6 +14,7 @@ import cat.iesesteveterradas.dbapi.persistencia.RespostaDAO;
 import cat.iesesteveterradas.dbapi.persistencia.Usuaris;
 import cat.iesesteveterradas.dbapi.persistencia.UsuarisDao;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -23,8 +24,7 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/usuaris/admin_obtenir_llista")
 public class LlistatUsuaris {
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response llistatUsuaris(@HeaderParam("Authorization") String authorizationHeader) {
         try {
