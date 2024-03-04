@@ -26,8 +26,6 @@ public class Quota {
     public Quota() {
     }
 
-    // Constructor, getters y setters
-
     public Long getId() {
         return id;
     }

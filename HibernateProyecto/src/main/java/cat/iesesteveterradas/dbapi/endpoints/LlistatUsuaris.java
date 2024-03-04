@@ -66,7 +66,7 @@ public class LlistatUsuaris {
 
                 JSONArray grups = new JSONArray();
                 for (Grups grup : usuario.getGrups()) {
-                    grups.put(grup);
+                    grups.put(grup.getNom());
                 }
                 userData.put("grups", grups);
 
