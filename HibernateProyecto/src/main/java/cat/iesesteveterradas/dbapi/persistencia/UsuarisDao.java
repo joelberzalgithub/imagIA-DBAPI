@@ -186,8 +186,6 @@ public class UsuarisDao {
         List<Usuaris> listaUsuarios = null;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            
-            // Asumiendo que el nombre del grupo de administradores es "Administrador"
             String nombreGrupoAdministradores = "Administrador";
             String hql = "SELECT u FROM Usuaris u WHERE NOT EXISTS (FROM u.grups g WHERE g.nom = :nombreGrupoAdministradores)";
             
@@ -196,6 +194,7 @@ public class UsuarisDao {
                                                        .list();
             
             transaction.commit();
+            logger.info(listaUsuarios.toString());
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -294,10 +293,10 @@ public class UsuarisDao {
         }
     }
 
-    public static String usuarioPorTelefon(String telefon) {
+    public static Usuaris usuarioPorTelefon(String telefon) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
-        String codigoValidacion = null;
+        Usuaris usuari = null;
 
         try {
             tx = session.beginTransaction();
@@ -308,7 +307,7 @@ public class UsuarisDao {
                                                 .uniqueResult();
             
             if (usuario != null) {
-                codigoValidacion = usuario.getCodivalidacio();
+                usuari = usuario;
                 logger.info("Código de validación obtenido para el usuario con teléfono: {}", telefon);
             } else {
                 logger.error("Usuario no encontrado con el teléfono: {}", telefon);
@@ -321,8 +320,36 @@ public class UsuarisDao {
             session.close();
         }
 
-        return codigoValidacion;
+        return usuari;
     }
+
+    public static boolean actualizarPlaIdPorTelefono(Long plaId, String telefono) {
+        Transaction transaction = null;
+        boolean actualizado = false;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            int filasActualizadas = session.createQuery("UPDATE Usuaris SET pla_id = :plaId WHERE telefon = :telefono")
+                                         .setParameter("plaId", plaId)
+                                         .setParameter("telefono", telefono)
+                                         .executeUpdate();
+    
+            if (filasActualizadas > 0) {
+                actualizado = true;
+                logger.info("Se actualizó correctamente el pla_id para el usuario con teléfono: {}", telefono);
+            } else {
+                logger.info("No se encontró ningún usuario con el teléfono: {} para actualizar el pla_id.", telefono);
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al actualizar el pla_id para el usuario con teléfono: {}", telefono, e);
+        }
+        return actualizado;
+    }
+    
     
     
     

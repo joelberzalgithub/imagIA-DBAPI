@@ -45,6 +45,38 @@ public class QuotaDAO {
         }
         return pla; 
     }
+
+
+    public static boolean actualizarQuotaDeUsuario(Long usuariId, int disponibleNuevo, int totalNuevo, int consumidaNueva) {
+        Transaction transaction = null;
+        boolean actualizado = false;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            // Suponiendo que cada usuario tiene una sola quota asociada y existe una relación en el mapeo
+            // Buscamos la quota a través del usuario
+            Quota quota = (Quota) session.createQuery("FROM Quota WHERE usuari_id = :usuariId")
+                                          .setParameter("usuariId", usuariId)
+                                          .uniqueResult();
+            
+            if (quota != null) {
+                // Actualizamos los campos con los nuevos valores
+                quota.setDisponible(disponibleNuevo);
+                quota.setTotal(totalNuevo);
+                quota.setConsumida(consumidaNueva);
+                session.update(quota); // Persistimos los cambios
+                actualizado = true;
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al actualizar la quota para el usuario con ID: " + usuariId, e);
+        }
+        return actualizado;
+    }
+    
+    
     
     
 
