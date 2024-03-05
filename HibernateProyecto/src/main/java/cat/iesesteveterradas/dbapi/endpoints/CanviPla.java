@@ -1,6 +1,8 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Pla;
 import cat.iesesteveterradas.dbapi.persistencia.QuotaDAO;
@@ -16,6 +18,8 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/usuaris/admin_canvi_pla")
 public class CanviPla {
+    private static final Logger logger = LoggerFactory.getLogger(CanviPla.class);
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -30,10 +34,12 @@ public class CanviPla {
             if (id != null) {
                 boolean admin = UsuarisDao.esUsuarioAdministrador(id);
                 if (admin == false) {
+                    logger.error("Este usuario no es admin.");
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity("{\"status\":\"ERROR\",\"message\":\"Este usuario no es admin\"}").build();
                 }
             } else {
+                logger.error("El token proporcionado no se ha encontrado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"El token proporcionado no se ha encontrado.\"}")
                         .build();
@@ -44,11 +50,13 @@ public class CanviPla {
             String pla = input.optString("pla", null);
 
             if (pla == null || pla.trim().isEmpty()) {
+                logger.error("Plan requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Nickname requerido\"}").build();
             }
 
             if (telefon == null) {
+                logger.error("Telefono requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Telèfon requerit\"}").build();
             }
@@ -73,8 +81,8 @@ public class CanviPla {
             userData.put("quota", quotas);
             jsonResponse.put("data", userData);
 
-            // Retorna la resposta
-            String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
+            logger.info("Petición registrada correctamente: {}", jsonResponse.toString());
+            String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
             return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en cambiar el Pla\"}")

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Grups;
 import cat.iesesteveterradas.dbapi.persistencia.Usuaris;
@@ -17,6 +19,8 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/usuaris/admin_obtenir_llista")
 public class LlistatUsuaris {
+    private static final Logger logger = LoggerFactory.getLogger(LlistatUsuaris.class);
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response llistatUsuaris(@HeaderParam("Authorization") String authorizationHeader) {
@@ -31,10 +35,12 @@ public class LlistatUsuaris {
             if (id != null) {
                 boolean admin = UsuarisDao.esUsuarioAdministrador(id);
                 if (admin == false) {
+                    logger.error("Este usuario no es admin.");
                     return Response.status(Response.Status.BAD_REQUEST)
-                            .entity("{\"status\":\"ERROR\",\"message\":\"Este usuario no es admin\"}").build();
+                            .entity("{\"status\":\"ERROR\",\"message\":\"Este usuario no es admin.\"}").build();
                 }
             } else {
+                logger.error("El token proporcionado no se ha encontrado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"El token proporcionado no se ha encontrado.\"}")
                         .build();
@@ -77,13 +83,14 @@ public class LlistatUsuaris {
             }
 
             jsonResponse.put("data", data);
-
+            logger.info("Petición registrada correctamente: {}", jsonResponse.toString());
             String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error en agafar els usuaris." + e);
+
             return Response.serverError()
-                    .entity("{\"status\":\"ERROR\",\"message\":\"Error en auntenticar l'usuari\"}" + e).build();
+                    .entity("{\"status\":\"ERROR\",\"message\":\"Error en agafar els usuaris.\"}" + e).build();
         }
     }
 }

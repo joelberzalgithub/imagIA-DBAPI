@@ -15,7 +15,7 @@ public class QuotaDAO {
         Quota quota = null;
         try {
             tx = session.beginTransaction();
-            quota = new Quota(total,consumida,disponible,usuari);
+            quota = new Quota(total, consumida, disponible, usuari);
             session.save(quota);
             tx.commit();
         } catch (Exception e) {
@@ -43,30 +43,29 @@ public class QuotaDAO {
         } finally {
             session.close();
         }
-        return pla; 
+        return pla;
     }
 
-
-    public static boolean actualizarQuotaDeUsuario(Long usuariId, int disponibleNuevo, int totalNuevo, int consumidaNueva) {
+    public static boolean actualizarQuotaDeUsuario(Long usuariId, int disponibleNuevo, int totalNuevo,
+            int consumidaNueva) {
         Transaction transaction = null;
         boolean actualizado = false;
         Session session = null;
         try {
             session = SessionFactoryManager.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            // Suponiendo que cada usuario tiene una sola quota asociada y existe una relación en el mapeo
-            // Buscamos la quota a través del usuario
             Quota quota = session.createQuery("FROM Quota q WHERE q.usuari.id = :usuariId", Quota.class)
-                                 .setParameter("usuariId", usuariId)
-                                 .uniqueResult();
-            
+                    .setParameter("usuariId", usuariId)
+                    .uniqueResult();
+
             if (quota != null) {
-                // Actualizamos los campos con los nuevos valores
+
                 quota.setDisponible(disponibleNuevo);
                 quota.setTotal(totalNuevo);
                 quota.setConsumida(consumidaNueva);
-                session.saveOrUpdate(quota); // Persistimos los cambios
+                session.saveOrUpdate(quota);
                 actualizado = true;
+                logger.info("Actualizada correctamente la quota del usuario " + usuariId);
             }
             transaction.commit();
         } catch (Exception e) {
@@ -81,28 +80,17 @@ public class QuotaDAO {
         }
         return actualizado;
     }
-    
-    
-    
-
 
     public static Quota obtenerQuotaDeUsuario(Long usuariId) {
         Quota quota = null;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             quota = session.createQuery("FROM Quota q WHERE q.usuari.id = :usuariId", Quota.class)
-                           .setParameter("usuariId", usuariId)
-                           .uniqueResult();
+                    .setParameter("usuariId", usuariId)
+                    .uniqueResult();
         } catch (Exception e) {
             logger.error("Error al obtener la quota para el usuario con ID: " + usuariId, e);
         }
         return quota;
     }
-
-
-    
-    
-
-
-
 
 }

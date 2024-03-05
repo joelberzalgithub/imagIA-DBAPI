@@ -20,31 +20,31 @@ public class RegistrarUsuari {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response afegirUsuari(String jsonInput,@HeaderParam("Authorization") String authorizationHeader) {
+    public Response afegirUsuari(String jsonInput) {
         try {
-            String token = authorizationHeader != null && authorizationHeader.startsWith("Bearer ")
-            ? authorizationHeader.substring(7)
-            : null;
+
             JSONObject input = new JSONObject(jsonInput);
-            
+
             String telefon = input.optString("telefon", null);
             String nickname = input.optString("nickname", null);
             String email = input.optString("email", null);
 
-
             // Validación para 'nickname'
             if (nickname == null || nickname.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Nickname requerido\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Nickname requerido\"}").build();
             }
 
             // Validación para 'telefon'
             if (telefon == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Telèfon requerit\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Telèfon requerit\"}").build();
             }
 
             // Validación para 'email'
             if (email == null || email.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Email requerit\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Email requerit\"}").build();
             }
 
             Random random = new Random();
@@ -54,17 +54,15 @@ public class RegistrarUsuari {
             long currentTimeMillis = System.currentTimeMillis();
             Date currentDate = new Date(currentTimeMillis);
 
-
-
             Pla pla = QuotaDAO.obtenQuotaDePla("Free");
-            Usuaris usuari = UsuarisDao.creaUsuario(nickname,telefon, email,codigo,pla,currentDate);
-            
+            Usuaris usuari = UsuarisDao.creaUsuario(nickname, telefon, email, codigo, pla, currentDate);
+
             QuotaDAO.creaQuota(pla.getQuota(), pla.getQuota(), 0, usuari);
 
             Grups grup = GrupsDAO.findGroupByName("Cliente");
 
             UsuarisDao.addUserToGroup(usuari.getId(), grup.getId());
-            
+
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "L'usuari s'ha creat correctament");
@@ -82,7 +80,8 @@ public class RegistrarUsuari {
             String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
-            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari\"}").build();
+            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari\"}")
+                    .build();
         }
     }
 }

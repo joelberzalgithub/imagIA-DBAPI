@@ -10,6 +10,9 @@ import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cat.iesesteveterradas.dbapi.persistencia.Peticions;
 import cat.iesesteveterradas.dbapi.persistencia.PeticionsDAO;
 import cat.iesesteveterradas.dbapi.persistencia.Quota;
@@ -26,6 +29,8 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/peticions/afegir")
 public class RegistrarPeticion {
+    private static final Logger logger = LoggerFactory.getLogger(RegistrarPeticion.class);
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -42,16 +47,19 @@ public class RegistrarPeticion {
             JSONArray paths = input.getJSONArray("imatges");
 
             if (model == null || model.trim().isEmpty()) {
+                logger.error("Modelo requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Model requerit\"}").build();
             }
 
             if (prompt == null || prompt.trim().isEmpty()) {
+                logger.error("Prompt requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Prompt requerit\"}").build();
             }
 
             if (paths == null || paths.length() == 0) {
+                logger.error("Base64 requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Base 64 requerit\"}").build();
             }
@@ -61,13 +69,13 @@ public class RegistrarPeticion {
             Date currentDate = new Date(currentTimeMillis);
 
             if (usuari == null) {
+                logger.error("Apitoken no valida.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Apitoken no valida\"}").build();
             } else {
                 Quota usuQuota = QuotaDAO.obtenerQuotaDeUsuario(usuari.getId());
                 QuotaDAO.actualizarQuotaDeUsuario(usuari.getId(), usuQuota.getDisponible() - 1, usuQuota.getTotal(),
                         usuQuota.getConsumida() + 1);
-                System.out.println("No ha pasado un día completo.");
             }
 
             for (int i = 0; i < paths.length(); i++) {
@@ -80,19 +88,18 @@ public class RegistrarPeticion {
                     path.add("Imagenes/" + nombre + ".jpg");
                     try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/" + nombre + ".jpg")) {
                         imageOutFile.write(imageBytes);
-                        System.out.println("La imagen se ha creado exitosamente.");
+                        logger.info("La imagen se ha creado exitosamente.");
                     } catch (IOException e) {
-                        System.out.println("Error al escribir la imagen");
-                        e.printStackTrace();
+                        logger.error("Error al escribir la imagen " + e);
+
                     }
                 } else {
                     path.add("Imagenes/" + nombre + ".png");
                     try (FileOutputStream imageOutFile = new FileOutputStream("Imagenes/" + nombre + ".png")) {
                         imageOutFile.write(imageBytes);
-                        System.out.println("La imagen se ha creado exitosamente.");
+                        logger.info("La imagen se ha creado exitosamente.");
                     } catch (IOException e) {
-                        System.out.println("Error al escribir la imagen");
-                        e.printStackTrace();
+                        logger.error("Error al escribir la imagen " + e);
                     }
 
                 }
@@ -109,10 +116,11 @@ public class RegistrarPeticion {
             userData.put("id", peticio.getId());
 
             jsonResponse.put("data", userData);
+            logger.info("Petición registrada correctamente: {}", jsonResponse.toString());
             String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error en afegir la peticio " + e);
             return Response.serverError()
                     .entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la peticio\"}" + e).build();
         }

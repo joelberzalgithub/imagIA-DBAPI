@@ -1,10 +1,23 @@
 <configuration>
+    <!-- Appender para consola -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
+    
+    <!-- Appender para archivo -->
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>data/logger.log</file> <!-- Nombre y ruta del archivo de log -->
+        <append>false</append> <!-- Si es true, los logs se añadirán al archivo; si es false, el archivo se sobrescribirá -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Configuración de nivel de log para la raíz y asignación de appenders -->
     <root level="info">
         <appender-ref ref="console" />
+        <appender-ref ref="file" />
     </root>
 </configuration>

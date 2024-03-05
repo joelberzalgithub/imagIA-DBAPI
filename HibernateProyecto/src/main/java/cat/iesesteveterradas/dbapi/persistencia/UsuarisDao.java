@@ -1,7 +1,5 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
-
-
 import java.util.Date;
 import java.util.List;
 
@@ -13,17 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UsuarisDao {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(UsuarisDao.class);
 
-    public static Usuaris creaUsuario(String nickname, String telefon, String email,String codi_validacio,Pla pla,Date data) {
+    public static Usuaris creaUsuario(String nickname, String telefon, String email, String codi_validacio, Pla pla,
+            Date data) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Usuaris usuario = null;
-        
+
         try {
             tx = session.beginTransaction();
-            usuario = new Usuaris(nickname, telefon, email,codi_validacio,pla,data);
+            usuario = new Usuaris(nickname, telefon, email, codi_validacio, pla, data);
             session.save(usuario);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nickname);
@@ -44,18 +43,18 @@ public class UsuarisDao {
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE apitoken = :apitoken")
-                                                .setParameter("apitoken", apitoken)
-                                                .uniqueResult();
-    
+                    .setParameter("apitoken", apitoken)
+                    .uniqueResult();
+
             if (usuario == null) {
                 logger.info("No se encontró ningún usuario con el apitoken: {}", apitoken);
                 return false;
             } else {
-                
+
                 Peticions peticion = session.get(Peticions.class, idPeticio);
                 if (peticion != null) {
                     usuario.addPeticio(peticion);
-                    session.saveOrUpdate(usuario); 
+                    session.saveOrUpdate(usuario);
                     logger.info("Peticion con ID: {} añadida al usuario con apitoken: {}", idPeticio, apitoken);
                     updateSuccess = true;
                 } else {
@@ -63,7 +62,7 @@ public class UsuarisDao {
                     return false;
                 }
             }
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -82,8 +81,8 @@ public class UsuarisDao {
         try {
             tx = session.beginTransaction();
             Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE telefon = :telefon")
-                                                .setParameter("telefon", telefon)
-                                                .uniqueResult();   
+                    .setParameter("telefon", telefon)
+                    .uniqueResult();
             if (usuario != null) {
                 // Actualiza el apitoken
                 usuario.setApitoken(apitoken);
@@ -93,10 +92,11 @@ public class UsuarisDao {
                 updateSuccess = true;
             } else {
                 logger.error("Usuario no encontrado con el teléfono: {}", telefon);
-                
+
             }
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             logger.error("Error al actualizar el apitoken para el usuario con teléfono: {}", telefon, e);
         } finally {
             session.close();
@@ -112,12 +112,12 @@ public class UsuarisDao {
 
         try {
             tx = session.beginTransaction();
-            
+
             // Busca el usuario por número de teléfono
             Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE telefon = :telefon")
-                                                .setParameter("telefon", telefon)
-                                                .uniqueResult();
-            
+                    .setParameter("telefon", telefon)
+                    .uniqueResult();
+
             if (usuario != null) {
                 codigoValidacion = usuario.getCodivalidacio();
                 logger.info("Código de validación obtenido para el usuario con teléfono: {}", telefon);
@@ -126,7 +126,8 @@ public class UsuarisDao {
                 // Manejar el caso de usuario no encontrado según se necesite
             }
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             logger.error("Error al obtener el código de validación para el usuario con teléfono: {}", telefon, e);
         } finally {
             session.close();
@@ -135,9 +136,6 @@ public class UsuarisDao {
         return codigoValidacion;
     }
 
-
-
-
     public static Long encontrarUsuarioPorToken(String apitoken) {
         Transaction transaction = null;
         boolean updateSuccess = false;
@@ -145,23 +143,23 @@ public class UsuarisDao {
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE apitoken = :apitoken")
-                                                .setParameter("apitoken", apitoken)
-                                                .uniqueResult();
-    
+                    .setParameter("apitoken", apitoken)
+                    .uniqueResult();
+
             if (usuario == null) {
                 logger.info("No se encontró ningún usuario con el apitoken: {}", apitoken);
-                
-            } else{
+
+            } else {
                 id = usuario.getId();
             }
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             logger.error("Error al actualizar el usuario con apitoken: {}", apitoken, e);
-            
+
         }
         return id;
     }
@@ -173,23 +171,23 @@ public class UsuarisDao {
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE apitoken = :apitoken")
-                                                .setParameter("apitoken", apitoken)
-                                                .uniqueResult();
-    
+                    .setParameter("apitoken", apitoken)
+                    .uniqueResult();
+
             if (usuario == null) {
                 logger.info("No se encontró ningún usuario con el apitoken: {}", apitoken);
-                
-            } else{
+
+            } else {
                 usuari = usuario;
             }
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             logger.error("Error al actualizar el usuario con apitoken: {}", apitoken, e);
-            
+
         }
         return usuari;
     }
@@ -200,7 +198,7 @@ public class UsuarisDao {
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             listaDeUsuarios = session.createQuery("FROM Usuaris", Usuaris.class).list();
-            
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -218,11 +216,11 @@ public class UsuarisDao {
             transaction = session.beginTransaction();
             String nombreGrupoAdministradores = "Administrador";
             String hql = "SELECT u FROM Usuaris u WHERE NOT EXISTS (FROM u.grups g WHERE g.nom = :nombreGrupoAdministradores)";
-            
+
             listaUsuarios = session.createQuery(hql, Usuaris.class)
-                                                       .setParameter("nombreGrupoAdministradores", nombreGrupoAdministradores)
-                                                       .list();
-            
+                    .setParameter("nombreGrupoAdministradores", nombreGrupoAdministradores)
+                    .list();
+
             transaction.commit();
             logger.info(listaUsuarios.toString());
         } catch (Exception e) {
@@ -233,7 +231,6 @@ public class UsuarisDao {
         }
         return listaUsuarios;
     }
-    
 
     public static boolean esUsuarioAdministrador(Long userId) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
@@ -241,10 +238,12 @@ public class UsuarisDao {
         boolean esAdministrador = false;
         try {
             tx = session.beginTransaction();
-            Long count = (Long) session.createQuery("SELECT COUNT(g) FROM Usuaris u JOIN u.grups g WHERE u.id = :userId AND g.nom = :groupName")
-                                        .setParameter("userId", userId)
-                                        .setParameter("groupName", "Administrador")
-                                        .uniqueResult();
+            Long count = (Long) session
+                    .createQuery(
+                            "SELECT COUNT(g) FROM Usuaris u JOIN u.grups g WHERE u.id = :userId AND g.nom = :groupName")
+                    .setParameter("userId", userId)
+                    .setParameter("groupName", "Administrador")
+                    .uniqueResult();
 
             tx.commit();
             esAdministrador = count > 0;
@@ -254,7 +253,8 @@ public class UsuarisDao {
                 logger.info("El usuario con ID: {} no es administrador", userId);
             }
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             logger.error("Error al verificar si el usuario con ID: {} es administrador", userId, e);
         } finally {
             session.close();
@@ -268,18 +268,19 @@ public class UsuarisDao {
         Long usuarioId = null; // Cambio para almacenar el ID del usuario encontrado
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE email = :email AND contrasena = :contrasena")
-                                                .setParameter("email", email)
-                                                .setParameter("contrasena", contrasena)
-                                                .uniqueResult();
-    
+            Usuaris usuario = (Usuaris) session
+                    .createQuery("FROM Usuaris WHERE email = :email AND contrasena = :contrasena")
+                    .setParameter("email", email)
+                    .setParameter("contrasena", contrasena)
+                    .uniqueResult();
+
             if (usuario != null) {
-                usuarioId = usuario.getId(); 
+                usuarioId = usuario.getId();
                 logger.info("Usuario encontrado con el email: {}, ID: {}", email, usuarioId);
             } else {
                 logger.info("No se encontró ningún usuario con el email: {} y contraseña proporcionada.", email);
             }
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -290,13 +291,10 @@ public class UsuarisDao {
         return usuarioId;
     }
 
-
     public static boolean addUserToGroup(Long userId, Long groupId) {
         Transaction transaction = null;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
-            // Recupera el usuario y el grupo de la base de datos
             Usuaris usuari = session.get(Usuaris.class, userId);
             Grups grup = session.get(Grups.class, groupId);
 
@@ -304,16 +302,10 @@ public class UsuarisDao {
                 System.out.println("Usuario o grupo no encontrado");
                 return false;
             }
-
-            // Establece la relación
             usuari.getGrups().add(grup);
-            grup.getUsuaris().add(usuari); // Este paso es opcional dependiendo de si quieres mantener ambas direcciones de la relación sincronizadas en memoria
-
-            // Guarda los cambios
+            grup.getUsuaris().add(usuari);
             session.saveOrUpdate(usuari);
-            session.saveOrUpdate(grup); // Este paso es opcional si el grupo no ha sido modificado aparte de añadir el usuario
-
-            // Completa la transacción
+            session.saveOrUpdate(grup);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -332,21 +324,21 @@ public class UsuarisDao {
 
         try {
             tx = session.beginTransaction();
-            
+
             // Busca el usuario por número de teléfono
             Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE telefon = :telefon")
-                                                .setParameter("telefon", telefon)
-                                                .uniqueResult();
-            
+                    .setParameter("telefon", telefon)
+                    .uniqueResult();
+
             if (usuario != null) {
                 usuari = usuario;
                 logger.info("Código de validación obtenido para el usuario con teléfono: {}", telefon);
             } else {
                 logger.error("Usuario no encontrado con el teléfono: {}", telefon);
-                // Manejar el caso de usuario no encontrado según se necesite
             }
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             logger.error("Error al obtener el código de validación para el usuario con teléfono: {}", telefon, e);
         } finally {
             session.close();
@@ -361,17 +353,17 @@ public class UsuarisDao {
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             int filasActualizadas = session.createQuery("UPDATE Usuaris SET pla_id = :plaId WHERE telefon = :telefono")
-                                         .setParameter("plaId", plaId)
-                                         .setParameter("telefono", telefono)
-                                         .executeUpdate();
-    
+                    .setParameter("plaId", plaId)
+                    .setParameter("telefono", telefono)
+                    .executeUpdate();
+
             if (filasActualizadas > 0) {
                 actualizado = true;
                 logger.info("Se actualizó correctamente el pla_id para el usuario con teléfono: {}", telefono);
             } else {
                 logger.info("No se encontró ningún usuario con el teléfono: {} para actualizar el pla_id.", telefono);
             }
-    
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -381,17 +373,16 @@ public class UsuarisDao {
         }
         return actualizado;
     }
-    
-    
+
     public static boolean actualizarFechaDeUsuario(Long usuarioId, Date nuevaFecha) {
         Transaction transaction = null;
         boolean actualizado = false;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Usuaris usuario = session.get(Usuaris.class, usuarioId);
-            
+
             if (usuario != null) {
-                
+
                 usuario.setDate(nuevaFecha);
                 session.update(usuario);
                 actualizado = true;
@@ -405,7 +396,5 @@ public class UsuarisDao {
         }
         return actualizado;
     }
-    
-    
-}
 
+}
