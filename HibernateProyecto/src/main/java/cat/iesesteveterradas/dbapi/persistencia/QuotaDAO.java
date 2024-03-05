@@ -50,20 +50,22 @@ public class QuotaDAO {
     public static boolean actualizarQuotaDeUsuario(Long usuariId, int disponibleNuevo, int totalNuevo, int consumidaNueva) {
         Transaction transaction = null;
         boolean actualizado = false;
-        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = SessionFactoryManager.getSessionFactory().openSession();
             transaction = session.beginTransaction();
             // Suponiendo que cada usuario tiene una sola quota asociada y existe una relación en el mapeo
             // Buscamos la quota a través del usuario
-            Quota quota = (Quota) session.createQuery("FROM Quota WHERE usuari_id = :usuariId")
-                                          .setParameter("usuariId", usuariId)
-                                          .uniqueResult();
+            Quota quota = session.createQuery("FROM Quota q WHERE q.usuari.id = :usuariId", Quota.class)
+                                 .setParameter("usuariId", usuariId)
+                                 .uniqueResult();
             
             if (quota != null) {
                 // Actualizamos los campos con los nuevos valores
                 quota.setDisponible(disponibleNuevo);
                 quota.setTotal(totalNuevo);
                 quota.setConsumida(consumidaNueva);
-                session.update(quota); // Persistimos los cambios
+                session.saveOrUpdate(quota); // Persistimos los cambios
                 actualizado = true;
             }
             transaction.commit();
@@ -72,11 +74,31 @@ public class QuotaDAO {
                 transaction.rollback();
             }
             logger.error("Error al actualizar la quota para el usuario con ID: " + usuariId, e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return actualizado;
     }
     
     
+    
+
+
+    public static Quota obtenerQuotaDeUsuario(Long usuariId) {
+        Quota quota = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            quota = session.createQuery("FROM Quota q WHERE q.usuari.id = :usuariId", Quota.class)
+                           .setParameter("usuariId", usuariId)
+                           .uniqueResult();
+        } catch (Exception e) {
+            logger.error("Error al obtener la quota para el usuario con ID: " + usuariId, e);
+        }
+        return quota;
+    }
+
+
     
     
 

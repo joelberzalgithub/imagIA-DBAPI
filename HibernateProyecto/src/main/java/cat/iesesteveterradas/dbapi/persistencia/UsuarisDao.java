@@ -1,6 +1,8 @@
 package cat.iesesteveterradas.dbapi.persistencia;
 
 
+
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -14,14 +16,14 @@ public class UsuarisDao {
     
     private static final Logger logger = LoggerFactory.getLogger(UsuarisDao.class);
 
-    public static Usuaris creaUsuario(String nickname, String telefon, String email,String codi_validacio,Pla pla) {
+    public static Usuaris creaUsuario(String nickname, String telefon, String email,String codi_validacio,Pla pla,Date data) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
         Usuaris usuario = null;
         
         try {
             tx = session.beginTransaction();
-            usuario = new Usuaris(nickname, telefon, email,codi_validacio,pla);
+            usuario = new Usuaris(nickname, telefon, email,codi_validacio,pla,data);
             session.save(usuario);
             tx.commit();
             logger.info("Nuevo usuario creado con el nickname: {}", nickname);
@@ -164,6 +166,34 @@ public class UsuarisDao {
         return id;
     }
 
+    public static Usuaris usuarioPorToken(String apitoken) {
+        Transaction transaction = null;
+        boolean updateSuccess = false;
+        Usuaris usuari = null;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Usuaris usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE apitoken = :apitoken")
+                                                .setParameter("apitoken", apitoken)
+                                                .uniqueResult();
+    
+            if (usuario == null) {
+                logger.info("No se encontró ningún usuario con el apitoken: {}", apitoken);
+                
+            } else{
+                usuari = usuario;
+            }
+    
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al actualizar el usuario con apitoken: {}", apitoken, e);
+            
+        }
+        return usuari;
+    }
+
     public static List<Usuaris> encontrarTodosLosUsuarios() {
         Transaction transaction = null;
         List<Usuaris> listaDeUsuarios = null;
@@ -211,9 +241,11 @@ public class UsuarisDao {
         boolean esAdministrador = false;
         try {
             tx = session.beginTransaction();
-            Long count = (Long) session.createQuery("SELECT COUNT(g) FROM Usuaris u JOIN u.grups g WHERE u.id = :userId AND g.id = 1")
+            Long count = (Long) session.createQuery("SELECT COUNT(g) FROM Usuaris u JOIN u.grups g WHERE u.id = :userId AND g.nom = :groupName")
                                         .setParameter("userId", userId)
+                                        .setParameter("groupName", "Administrador")
                                         .uniqueResult();
+
             tx.commit();
             esAdministrador = count > 0;
             if (esAdministrador) {
@@ -351,6 +383,28 @@ public class UsuarisDao {
     }
     
     
+    public static boolean actualizarFechaDeUsuario(Long usuarioId, Date nuevaFecha) {
+        Transaction transaction = null;
+        boolean actualizado = false;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Usuaris usuario = session.get(Usuaris.class, usuarioId);
+            
+            if (usuario != null) {
+                
+                usuario.setDate(nuevaFecha);
+                session.update(usuario);
+                actualizado = true;
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al actualizar la fecha para el usuario con ID: " + usuarioId, e);
+        }
+        return actualizado;
+    }
     
     
 }

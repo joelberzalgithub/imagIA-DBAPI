@@ -1,5 +1,6 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
+import java.util.Date;
 import java.util.Random;
 
 import org.json.JSONObject;
@@ -50,10 +51,13 @@ public class RegistrarUsuari {
             int codigo1 = random.nextInt(900000) + 100000;
             String codigo = String.valueOf(codigo1);
 
+            long currentTimeMillis = System.currentTimeMillis();
+            Date currentDate = new Date(currentTimeMillis);
+
 
 
             Pla pla = QuotaDAO.obtenQuotaDePla("Free");
-            Usuaris usuari = UsuarisDao.creaUsuario(nickname,telefon, email,codigo,pla);
+            Usuaris usuari = UsuarisDao.creaUsuario(nickname,telefon, email,codigo,pla,currentDate);
             
             QuotaDAO.creaQuota(pla.getQuota(), pla.getQuota(), 0, usuari);
 

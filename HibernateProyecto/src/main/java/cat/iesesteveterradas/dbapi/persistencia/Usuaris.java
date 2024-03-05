@@ -15,6 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,8 @@ public class Usuaris {
     private String email;
     @Column(unique = true)
     private String contrasena;
+
+    private Date data;
 
     
     @ManyToOne(fetch = FetchType.EAGER)
@@ -74,12 +77,13 @@ public class Usuaris {
 
     }
 
-    public Usuaris(String nickname, String telefon,String email,String codi_validacio,Pla id) {
+    public Usuaris(String nickname, String telefon,String email,String codi_validacio,Pla id, Date data) {
         this.nickname = nickname;
         this.email = email;
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
         this.pla = id;
+        this.data = data;
         
         
     }
@@ -100,6 +104,14 @@ public class Usuaris {
     public void setQuota(Quota quota) {
         this.quota = quota;
         quota.setUsuari(this);
+    }
+
+    public Date getDate() {
+        return this.data;
+    }
+
+    public void setDate(Date data) {
+        this.data = data;
     }
     
 
