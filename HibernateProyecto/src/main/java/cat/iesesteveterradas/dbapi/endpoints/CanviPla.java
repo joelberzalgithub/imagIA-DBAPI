@@ -23,7 +23,7 @@ public class CanviPla {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response afegirUsuari(String jsonInput, @HeaderParam("Authorization") String authorizationHeader) {
+    public Response canviPla(String jsonInput, @HeaderParam("Authorization") String authorizationHeader) {
         try {
             String token = authorizationHeader != null && authorizationHeader.startsWith("Bearer ")
                     ? authorizationHeader.substring(7)

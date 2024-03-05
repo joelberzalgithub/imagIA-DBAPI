@@ -20,9 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.Fetch;
-
 @Entity
 public class Usuaris {
     @Id
@@ -42,7 +39,6 @@ public class Usuaris {
 
     private Date data;
 
-    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pla_id")
     private Pla pla;
@@ -50,45 +46,37 @@ public class Usuaris {
     @OneToMany(mappedBy = "usuari", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Peticions> peticions = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "usuaris_grups",
-        joinColumns = @JoinColumn(name = "usuari_id"),
-        inverseJoinColumns = @JoinColumn(name = "grup_id")
-    )
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @JoinTable(name = "usuaris_grups", joinColumns = @JoinColumn(name = "usuari_id"), inverseJoinColumns = @JoinColumn(name = "grup_id"))
     private List<Grups> grups = new ArrayList<>();
 
     @OneToOne(mappedBy = "usuari", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Quota quota;
 
-    
-
-    
     public Usuaris() {
     }
 
-    public Usuaris(String nickname, String apitoken, Boolean ToS, Pla pla, String telefon, String codi_validacio,String contrasena) {
+    public Usuaris(String nickname, String apitoken, Boolean ToS, Pla pla, String telefon, String codi_validacio,
+            String contrasena) {
         this.nickname = nickname;
         this.apitoken = apitoken;
         this.ToS = ToS;
-        this.pla = pla; 
+        this.pla = pla;
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
 
     }
 
-    public Usuaris(String nickname, String telefon,String email,String codi_validacio,Pla id, Date data) {
+    public Usuaris(String nickname, String telefon, String email, String codi_validacio, Pla id, Date data) {
         this.nickname = nickname;
         this.email = email;
         this.telefon = telefon;
         this.codi_validacio = codi_validacio;
         this.pla = id;
         this.data = data;
-        
-        
+
     }
 
-    
     public Pla getPla() {
         return pla;
     }
@@ -100,7 +88,7 @@ public class Usuaris {
     public Quota getQuota() {
         return quota;
     }
-    
+
     public void setQuota(Quota quota) {
         this.quota = quota;
         quota.setUsuari(this);
@@ -113,7 +101,6 @@ public class Usuaris {
     public void setDate(Date data) {
         this.data = data;
     }
-    
 
     public String getNickname() {
         return this.nickname;
@@ -174,6 +161,7 @@ public class Usuaris {
     public void setTelefon(String telefon) {
         this.telefon = telefon;
     }
+
     // Getters i setters
     public Long getId() {
         return id;
@@ -190,7 +178,6 @@ public class Usuaris {
     public void setGrups(List<Grups> grups) {
         this.grups = grups;
     }
-
 
     public Set<Peticions> getPeticions() {
         return peticions;
@@ -209,13 +196,13 @@ public class Usuaris {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Configuració [id=").append(id)
-                
+
                 .append(", propietats=[");
         for (Peticions propietat : peticions) {
             sb.append(propietat.toString()).append(", ");
         }
         if (!peticions.isEmpty()) {
-            sb.setLength(sb.length() - 2); 
+            sb.setLength(sb.length() - 2);
         }
         sb.append("]]");
         return sb.toString();

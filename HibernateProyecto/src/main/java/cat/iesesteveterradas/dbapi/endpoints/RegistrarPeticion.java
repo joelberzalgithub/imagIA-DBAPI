@@ -120,9 +120,9 @@ public class RegistrarPeticion {
             String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
-            logger.error("Error en afegir la peticio " + e);
+            logger.error("Error en afegir la peticio ." + e);
             return Response.serverError()
-                    .entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la peticio\"}" + e).build();
+                    .entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la peticio.\"}" + e).build();
         }
     }
 

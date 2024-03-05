@@ -1,13 +1,9 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.Date;
-
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import cat.iesesteveterradas.dbapi.persistencia.Peticions;
 import cat.iesesteveterradas.dbapi.persistencia.PeticionsDAO;
 import cat.iesesteveterradas.dbapi.persistencia.Resposta;
 import cat.iesesteveterradas.dbapi.persistencia.RespostaDAO;
@@ -20,6 +16,8 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/respostes/afegir")
 public class RegistrarResposta {
+    private static final Logger logger = LoggerFactory.getLogger(RegistrarResposta.class);
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -31,13 +29,15 @@ public class RegistrarResposta {
             String text = input.optString("text_generat", null);
 
             if (text == null || text.trim().isEmpty()) {
+                logger.error("Resposta requerida.");
                 return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("{\"status\":\"ERROR\",\"message\":\"Resposta requerida\"}").build();
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Resposta requerida.\"}").build();
             }
 
             if (id == 0) {
+                logger.error("Id requerit.");
                 return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("{\"status\":\"ERROR\",\"message\":\"Id requerit\"}").build();
+                        .entity("{\"status\":\"ERROR\",\"message\":\"Id requerit.\"}").build();
             }
 
             Resposta resposta = RespostaDAO.crearResposta(text, PeticionsDAO.findPeticionsById(id));
@@ -52,11 +52,12 @@ public class RegistrarResposta {
 
             jsonResponse.put("data", userData);
 
-            // Retorna la resposta
+            logger.info("Petición registrada correctamente: {}", jsonResponse.toString());
             String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
-            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la peticio\"}")
+            logger.error("Error en afegir la resposta. " + e);
+            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la resposta.\"}")
                     .build();
         }
     }

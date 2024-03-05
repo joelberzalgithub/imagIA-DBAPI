@@ -263,24 +263,20 @@ public class UsuarisDao {
         return esAdministrador;
     }
 
-    public static Long encontrarUsuarioPorEmailYContrasena(String email, String contrasena) {
+    public static Usuaris encontrarUsuarioPorEmailYContrasena(String email, String contrasena) {
         Transaction transaction = null;
-        Long usuarioId = null; // Cambio para almacenar el ID del usuario encontrado
+        Usuaris usuario = null;
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Usuaris usuario = (Usuaris) session
-                    .createQuery("FROM Usuaris WHERE email = :email AND contrasena = :contrasena")
+            usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE email = :email AND contrasena = :contrasena")
                     .setParameter("email", email)
                     .setParameter("contrasena", contrasena)
                     .uniqueResult();
-
             if (usuario != null) {
-                usuarioId = usuario.getId();
-                logger.info("Usuario encontrado con el email: {}, ID: {}", email, usuarioId);
+                logger.info("Usuario encontrado con el email: {}", email);
             } else {
                 logger.info("No se encontró ningún usuario con el email: {} y contraseña proporcionada.", email);
             }
-
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -288,7 +284,31 @@ public class UsuarisDao {
             }
             logger.error("Error al buscar el usuario con email: {} y contraseña proporcionada.", email, e);
         }
-        return usuarioId;
+        return usuario;
+    }
+
+    public static boolean actualizarApiTokenDeUsuario(Long usuarioId, String nuevoApiToken) {
+        Transaction transaction = null;
+        boolean actualizacionExitosa = false;
+        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Usuaris usuario = session.get(Usuaris.class, usuarioId);
+            if (usuario != null) {
+                usuario.setApitoken(nuevoApiToken);
+                session.update(usuario); // Guardamos los cambios
+                transaction.commit();
+                actualizacionExitosa = true;
+                logger.info("apiToken actualizado para el usuario con ID: {}", usuarioId);
+            } else {
+                logger.info("No se encontró ningún usuario con el ID: {}", usuarioId);
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Error al actualizar el apiToken para el usuario con ID: {}", usuarioId, e);
+        }
+        return actualizacionExitosa;
     }
 
     public static boolean addUserToGroup(Long userId, Long groupId) {

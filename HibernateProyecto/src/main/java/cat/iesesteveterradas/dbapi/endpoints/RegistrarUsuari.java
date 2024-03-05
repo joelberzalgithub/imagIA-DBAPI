@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Random;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cat.iesesteveterradas.dbapi.persistencia.Grups;
 import cat.iesesteveterradas.dbapi.persistencia.GrupsDAO;
@@ -17,6 +19,8 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/usuari/registrar")
 public class RegistrarUsuari {
+    private static final Logger logger = LoggerFactory.getLogger(RegistrarUsuari.class);
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -29,20 +33,20 @@ public class RegistrarUsuari {
             String nickname = input.optString("nickname", null);
             String email = input.optString("email", null);
 
-            // Validación para 'nickname'
             if (nickname == null || nickname.trim().isEmpty()) {
+                logger.error("Nickname requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Nickname requerido\"}").build();
             }
 
-            // Validación para 'telefon'
             if (telefon == null) {
+                logger.error("Telefono requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Telèfon requerit\"}").build();
             }
 
-            // Validación para 'email'
             if (email == null || email.trim().isEmpty()) {
+                logger.error("Email requerido no proporcionado.");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"status\":\"ERROR\",\"message\":\"Email requerit\"}").build();
             }
@@ -73,14 +77,14 @@ public class RegistrarUsuari {
             userData.put("email", email);
             userData.put("codi_validacio", codigo);
 
-            // Añadir el objeto "data" al JSON de respuesta
             jsonResponse.put("data", userData);
 
-            // Retorna la resposta
-            String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
+            logger.info("Petición registrada correctamente: {}", jsonResponse.toString());
+            String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
-            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari\"}")
+            logger.error("Error en afegir l'usuari." + e);
+            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir l'usuari.\"}")
                     .build();
         }
     }
