@@ -37,6 +37,28 @@ public class UsuarisDao {
         return usuario;
     }
 
+    public static Usuaris creaUsuarioAdmin(String nickname, String contrasena, String email) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+        Usuaris usuario = null;
+
+        try {
+            tx = session.beginTransaction();
+            usuario = new Usuaris(nickname, contrasena, email);
+            session.save(usuario);
+            tx.commit();
+            logger.info("Nuevo usuario creado con el nickname: {}", nickname);
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            logger.error("Error al crear el usuario", e);
+        } finally {
+            session.close();
+        }
+        return usuario;
+    }
+
     public static boolean updateUsuarioPeticionByApiToken(String apitoken, Long idPeticio) {
         Transaction transaction = null;
         boolean updateSuccess = false;

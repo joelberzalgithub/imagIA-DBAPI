@@ -77,6 +77,12 @@ public class Usuaris {
 
     }
 
+    public Usuaris(String nickname, String contrasena, String email) {
+        this.nickname = nickname;
+        this.email = email;
+        this.contrasena = contrasena;
+    }
+
     public Pla getPla() {
         return pla;
     }
