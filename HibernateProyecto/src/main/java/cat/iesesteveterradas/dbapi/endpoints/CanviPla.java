@@ -85,6 +85,8 @@ public class CanviPla {
             String prettyJsonResponse = jsonResponse.toString(4);
             return Response.ok(prettyJsonResponse).build();
         } catch (Exception e) {
+            logger.error("Error en cambiar el Pla. " + e);
+            e.printStackTrace();
             return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en cambiar el Pla\"}")
                     .build();
         }

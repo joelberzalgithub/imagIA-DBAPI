@@ -394,9 +394,11 @@ public class UsuarisDao {
     public static boolean actualizarPlaIdPorTelefono(Long plaId, String telefono) {
         Transaction transaction = null;
         boolean actualizado = false;
-        try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = SessionFactoryManager.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            int filasActualizadas = session.createQuery("UPDATE Usuaris SET pla_id = :plaId WHERE telefon = :telefono")
+            int filasActualizadas = session.createQuery("UPDATE Usuaris SET pla.id = :plaId WHERE telefon = :telefono")
                     .setParameter("plaId", plaId)
                     .setParameter("telefono", telefono)
                     .executeUpdate();
@@ -410,10 +412,14 @@ public class UsuarisDao {
 
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
+            if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             logger.error("Error al actualizar el pla_id para el usuario con teléfono: {}", telefono, e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return actualizado;
     }
