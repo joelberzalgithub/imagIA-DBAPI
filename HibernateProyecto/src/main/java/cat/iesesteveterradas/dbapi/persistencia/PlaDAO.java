@@ -8,23 +8,22 @@ import org.slf4j.LoggerFactory;
 public class PlaDAO {
     private static final Logger logger = LoggerFactory.getLogger(Pla.class);
 
-    public static Quota creaQuota(Integer disponible, Integer total, Integer consumida, Usuaris usuari) {
+    public static Pla obtenerPlaPorId(Long id) {
         Session session = SessionFactoryManager.getSessionFactory().openSession();
         Transaction tx = null;
-        Quota quota = null;
+        Pla pla = null;
         try {
             tx = session.beginTransaction();
-            quota = new Quota(total, consumida, disponible, usuari);
-            session.save(quota);
+            pla = session.get(Pla.class, id);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
-            logger.error("Error al crear la quota", e);
+            logger.error("Error al obtener el Pla con ID: " + id, e);
         } finally {
             session.close();
         }
-        return quota;
+        return pla;
     }
 }

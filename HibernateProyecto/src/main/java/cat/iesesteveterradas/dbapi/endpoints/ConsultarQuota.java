@@ -3,6 +3,8 @@ package cat.iesesteveterradas.dbapi.endpoints;
 import java.util.Date;
 import org.json.JSONObject;
 
+import cat.iesesteveterradas.dbapi.persistencia.Pla;
+import cat.iesesteveterradas.dbapi.persistencia.PlaDAO;
 import cat.iesesteveterradas.dbapi.persistencia.Quota;
 import cat.iesesteveterradas.dbapi.persistencia.QuotaDAO;
 import cat.iesesteveterradas.dbapi.persistencia.Usuaris;
@@ -53,16 +55,18 @@ public class ConsultarQuota {
                 }
 
             }
+
+            Pla plan = PlaDAO.obtenerPlaPorId(usuari.getPla().getId());
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("status", "OK");
             jsonResponse.put("message", "Quota consultada correctament");
 
             JSONObject userData = new JSONObject();
-            userData.put("pla", ".");
+            userData.put("pla", plan.getNom());
             JSONObject quotas = new JSONObject();
             quotas.put("total", usuQuota.getTotal());
-            quotas.put("consumida", usuQuota.getConsumida());
-            quotas.put("disponible", usuQuota.getDisponible());
+            quotas.put("consumida", 0);
+            quotas.put("disponible", usuQuota.getTotal());
             userData.put("quota", quotas);
             jsonResponse.put("data", userData);
 

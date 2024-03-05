@@ -20,10 +20,12 @@ cat/iesesteveterradas/dbapi/persistencia/Propietat.class
 cat/iesesteveterradas/dbapi/DBApi.class
 cat/iesesteveterradas/dbapi/persistencia/QuotaDAO.class
 cat/iesesteveterradas/dbapi/persistencia/GenericDAO.class
+cat/iesesteveterradas/dbapi/endpoints/ConsultarQuota.class
 cat/iesesteveterradas/dbapi/endpoints/RegistrarResposta.class
 cat/iesesteveterradas/dbapi/persistencia/Configuracio.class
 cat/iesesteveterradas/dbapi/endpoints/RegistrarUsuari.class
 cat/iesesteveterradas/dbapi/persistencia/RespostaDAO.class
+cat/iesesteveterradas/dbapi/persistencia/PlaDAO.class
 cat/iesesteveterradas/dbapi/endpoints/CanviPla.class
 cat/iesesteveterradas/dbapi/persistencia/Usuaris.class
 cat/iesesteveterradas/dbapi/endpoints/LlistatUsuaris.class
