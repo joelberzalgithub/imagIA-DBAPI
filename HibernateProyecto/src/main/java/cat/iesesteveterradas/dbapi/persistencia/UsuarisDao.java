@@ -3,6 +3,7 @@ package cat.iesesteveterradas.dbapi.persistencia;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -288,11 +289,12 @@ public class UsuarisDao {
     public static Usuaris encontrarUsuarioPorEmailYContrasena(String email, String contrasena) {
         Transaction transaction = null;
         Usuaris usuario = null;
+        String hashedPassword = DigestUtils.sha256Hex(contrasena);
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             usuario = (Usuaris) session.createQuery("FROM Usuaris WHERE email = :email AND contrasena = :contrasena")
                     .setParameter("email", email)
-                    .setParameter("contrasena", contrasena)
+                    .setParameter("contrasena", hashedPassword)
                     .uniqueResult();
             if (usuario != null) {
                 logger.info("Usuario encontrado con el email: {}", email);

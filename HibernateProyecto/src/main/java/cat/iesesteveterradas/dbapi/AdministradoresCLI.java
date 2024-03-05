@@ -3,6 +3,8 @@ package cat.iesesteveterradas.dbapi;
 import java.io.Console;
 import java.util.Arrays;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import cat.iesesteveterradas.dbapi.persistencia.Grups;
 import cat.iesesteveterradas.dbapi.persistencia.GrupsDAO;
 import cat.iesesteveterradas.dbapi.persistencia.Usuaris;
@@ -49,7 +51,8 @@ public class AdministradoresCLI {
 
         if (Arrays.equals(password, confirmPassword)) {
             String passwordString = new String(confirmPassword);
-            Usuaris usuari = UsuarisDao.creaUsuarioAdmin(nickname, passwordString, email);
+            String hashedPassword = DigestUtils.sha256Hex(passwordString);
+            Usuaris usuari = UsuarisDao.creaUsuarioAdmin(nickname, hashedPassword, email);
             Grups grup = GrupsDAO.findGroupByName("Administrador");
 
             UsuarisDao.addUserToGroup(usuari.getId(), grup.getId());
